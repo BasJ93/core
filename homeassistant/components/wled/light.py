@@ -157,7 +157,9 @@ class WLEDSegmentLight(LightEntity, WLEDDeviceEntity):
         self, entry_id: str, coordinator: WLEDDataUpdateCoordinator, segment: int
     ):
         """Initialize WLED segment light."""
-        self._rgbw = coordinator.data.info.leds.rgbw
+        # Check if the controller is running in rgbw mode and accepts white value data.
+        # If it does not, the controller calculates the white value on it own
+        self._rgbw = coordinator.data.info.leds.rgbw & coordinator.data.info.leds.wv
         self._segment = segment
 
         # If this is the one and only segment, use a simpler name
